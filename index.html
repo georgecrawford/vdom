@@ -1,27 +1,81 @@
 <html>
 	<head>
 		<script src='./build/main.js'></script>
+		<title>Virtual DOM</title>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0 20% 0 0;
+			}
+
+			.wrapper {
+				padding: 20px;
+			}
+
+			#log {
+				height: 80%;
+				width: 20%;
+				overflow: scroll;
+				background: silver;
+				position: absolute;
+				top: 0;
+				right: 0;
+				font-family: monospace;
+				padding: 10px;
+				font-size: 8px;
+				border: 1px solid gray;
+			}
+
+			#log h3 {
+				margin: 0;
+			}
+
+			#volatile {
+				padding: 10px;
+				border: 1px solid gray;
+				margin: 10px;
+				background-color: silver;
+			}
+
+			section {
+				padding: 10px;
+			}
+
+		</style>
 	</head>
 	<body>
+		<code id="log">
+			<h3>Mutation events</h3>
+		</code>
+	<div class="wrapper">
 		<h1>Virtual DOM</h1>
 		<button style='font-size: 20px; color: red;'>Click me!</button>
-		<section>
-			<h2>My subheading 1</h2>
-			<p>Manual DOM manipulation is messy and keeping track of the previous DOM state is hard. A solution to this problem is to write your code as if you were recreating the entire DOM whenever state changes. Of course, if you actually recreated the entire DOM every time your application state changed, your app would be very slow and your input fields would lose focus.</p>
-		</section>
-		<section>
-			<h2>My subheading 2</h2>
-			<p>Manual DOM manipulation is messy and keeping track of the previous DOM state is hard. A solution to this problem is to write your code as if you were recreating the entire DOM whenever state changes. Of course, if you actually recreated the entire DOM every time your application state changed, your app would be very slow and your input fields would lose focus.</p>
-		</section>
-		<section>
-			<h2>My subheading 3</h2>
-			<p>Manual DOM manipulation is messy and keeping track of the previous DOM state is hard. A solution to this problem is to write your code as if you were recreating the entire DOM whenever state changes. Of course, if you actually recreated the entire DOM every time your application state changed, your app would be very slow and your input fields would lose focus.</p>
-		</section>
+		<p>Clicking the button will run a Handlebars templating pass on views/sections.html. Each section will be assigned a different background colour. For random button presses, the heading text will also be changed. The diff between the current DOM and the new HTML is calculated, and a patch is applied to update the DOM. Inspecting the DOM mutation events, you should see that the only changes to the DOM are the style attribute and the inner text of the header. Other elements are untouched.</p>
+
 		<h2>Useful links</h2>
 		<ul>
-			<li><a href="https://github.com/stevenvachon/handlebars-virtual-dom">Handlebars => vdom compiler</a></li>
+			<li><a href="https://github.com/stevenvachon/handlebars-virtual-dom">Handlebars => vdom compiler - not yet implemented!</a></li>
 			<li><a href="https://github.com/Raynos/main-loop/">Batch virtual DOM changes. Update the virtual tree at most once per request animation frame.</a></li>
 			<li><a href="https://github.com/Matt-Esch/virtual-dom/wiki">Other links</a></li>
 		</ul>
+
+		<div id="volatile">
+			<section>
+				<h2>Section 1</h2>
+				<p>Manual DOM manipulation is messy and keeping track of the previous DOM state is hard. A solution to this problem is to write your code as if you were recreating the entire DOM whenever state changes. Of course, if you actually recreated the entire DOM every time your application state changed, your app would be very slow and your input fields would lose focus.</p>
+			</section>
+			<section>
+				<h2>Section 2</h2>
+				<p>Manual DOM manipulation is messy and keeping track of the previous DOM state is hard. A solution to this problem is to write your code as if you were recreating the entire DOM whenever state changes. Of course, if you actually recreated the entire DOM every time your application state changed, your app would be very slow and your input fields would lose focus.</p>
+			</section>
+			<section>
+				<h2>Section 3</h2>
+				<p>Manual DOM manipulation is messy and keeping track of the previous DOM state is hard. A solution to this problem is to write your code as if you were recreating the entire DOM whenever state changes. Of course, if you actually recreated the entire DOM every time your application state changed, your app would be very slow and your input fields would lose focus.</p>
+			</section>
+		</div>
+	</div>
 	</body>
 </html>
