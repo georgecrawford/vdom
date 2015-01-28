@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "watchify main.js -o build/main.js --verbose"
+    "watch": "watchify main.js -o build/main.js --verbose",
+    "postinstall": "./node_modules/browserify/bin/cmd.js main.js -o build/main.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "watchify": "^2.2.1",
     "browserify": "~6.3.4",
     "vdom-virtualize": "0.0.6",
-    "mustache": "~1.0.0"
+    "mustache": "~1.0.0",
+    "forever": "~0.13.0"
   }
 }
