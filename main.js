@@ -50,7 +50,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		log('<br /><br /><strong>[[Button click]]</strong>');
 
-		// Newly-generated HTML, from fruitmachine's module.toHTML() for example
+		// Newly-generated HTML, from fruitmachine's module.toHTML() for example.
+		// TODO: add a new FTFruitMachine method renderVirtual(), which generates HTML,
+		// parses to a vNode, diffs with the current DOM (or previous vNode if set), and
+		// applies a patch. Is it even possible to hold a vNode of the whole DOM in
+		// memory, and when a FM module is rendered, update that part of the vNode
+		// descendent tree?
 		var random = (Math.random() > 0.75);
 		var newHTML = require('./views/sections.html')({
 			sections: [
