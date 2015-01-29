@@ -1,28 +1,72 @@
-var virtualize = require('vdom-virtualize');
-var h = require('virtual-dom/h');
-var diff = require('virtual-dom/diff');
-var patch = require('virtual-dom/patch');
-var attachFastClick = require('fastclick');
+var virtualize   = require('vdom-virtualize');
+var h            = require('virtual-dom/h');
+var diff         = require('virtual-dom/diff');
+var patch        = require('virtual-dom/patch');
+var fastClick    = require('fastclick');
+var fruitmachine = require('fruitmachine');
 
+var wrapperEl;
+var logEl;
+var container;
+var existingVNode;
 
-document.addEventListener('DOMContentLoaded', function() {
+function setup() {
+	logEl     = document.querySelector('.log');
+	wrapperEl = document.querySelector('.wrapper');
 
-	attachFastClick(document.body);
+	fastClick(document.body);
+}
 
-	var logEl   = document.querySelector('#log');
-	var button  = document.querySelector('button');
-	var volatile = document.querySelector('#volatile');
+function log(message) {
+	logEl.innerHTML += '<br /><br />' + message;
+	logEl.scrollTop = logEl.scrollHeight;
+}
 
-	function log(message) {
-		logEl.innerHTML += '<br /><br />' + message;
-		logEl.scrollTop = logEl.scrollHeight;
+var sectionModule = fruitmachine.define({
+	name: 'section',
+	template: require('./views/section.html')
+});
+
+var containerModule = fruitmachine.define({
+	name: 'container',
+	template: require('./views/container.html')
+});
+
+function createNewVNode(inject) {
+
+	var random = Math.random() > 0.75;
+
+	if (!container) {
+		container = new containerModule()
+			.add(new sectionModule({
+				slot:  1
+			}))
+			.add(new sectionModule({
+				slot:  2
+			}))
+			.add(new sectionModule({
+				slot:  3
+			}));
 	}
 
-	// Get a VNode for the initial, rendered DOM node
-	var existingVNode = virtualize(volatile);
-	console.log('Initial DOM node', existingVNode);
+	container.modules('section').forEach(function _configureModule(module) {
+		module.model.set('color', Math.random().toString(16).slice(2, 8));
+		module.model.set('section', random ? 'RANDOM!' : module.slot);
+	});
 
-	// Log mutation events, so we can prove the virtual dom diff/patch is working
+	container.render();
+
+	if (inject) {
+		container.appendTo(wrapperEl);
+	}
+
+	var vNode = virtualize(container.el);
+	console.log('Initial DOM node', vNode);
+	return vNode;
+}
+
+// Log mutation events, so we can prove the virtual dom diff/patch is working
+function logMutations(root) {
 	var observer = new MutationObserver(function(mutations) {
 		mutations.forEach(function(mutation) {
 			switch (mutation.type) {
@@ -39,41 +83,35 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	});
 
-	observer.observe(volatile, {
+	observer.observe(root, {
 		attributes:    true,
 		childList:     true,
 		characterData: true,
 		subtree:       true
 	});
+}
 
-	button.addEventListener('click', function() {
+function updateDom(existingVNode, newVNode) {
+	var patches = diff(existingVNode, newVNode);
+	console.log('Applying patches', patches);
+
+	patch(container.el, patches);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+
+	setup();
+	existingVNode = createNewVNode(true);
+	logMutations(wrapperEl);
+
+	document.querySelector('button').addEventListener('click', function() {
 
 		log('<br /><br /><strong>[[Button click]]</strong>');
 
-		// Newly-generated HTML, from fruitmachine's module.toHTML() for example.
-		// TODO: add a new FTFruitMachine method renderVirtual(), which generates HTML,
-		// parses to a vNode, diffs with the current DOM (or previous vNode if set), and
-		// applies a patch. Is it even possible to hold a vNode of the whole DOM in
-		// memory, and when a FM module is rendered, update that part of the vNode
-		// descendent tree?
-		var random = (Math.random() > 0.75);
-		var newHTML = require('./views/sections.html')({
-			sections: [
-				{ color: Math.random().toString(16).slice(2, 8), section: random ? 'RANDOM!' : 1 },
-				{ color: Math.random().toString(16).slice(2, 8), section: random ? 'RANDOM!' : 2 },
-				{ color: Math.random().toString(16).slice(2, 8), section: random ? 'RANDOM!' : 3 }
-			]
-		});
-		var newVNode = virtualize.fromHTML(newHTML);
-		console.log('New DOM node', newVNode);
-
-		var patches = diff(existingVNode, newVNode);
-		console.log('Applying patches', patches);
-
-		patch(volatile, patches);
+		var newVNode = createNewVNode();
+		updateDom(existingVNode, newVNode);
 
 		// Set the pointer to what's now in the DOM
 		existingVNode = newVNode;
 	});
 });
-

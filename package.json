@@ -17,6 +17,7 @@
     "vdom-virtualize": "0.0.6",
     "handlebars": "^2",
     "forever": "~0.13.0",
-    "fastclick": "~1.0.6"
+    "fastclick": "~1.0.6",
+    "fruitmachine": "~0.8.3"
   }
 }

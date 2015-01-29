@@ -15,7 +15,7 @@
 				padding: 20px;
 			}
 
-			#log {
+			.log {
 				height: 80%;
 				width: 20%;
 				overflow: scroll;
@@ -29,11 +29,11 @@
 				border: 1px solid gray;
 			}
 
-			#log h3 {
+			.log h3 {
 				margin: 0;
 			}
 
-			#volatile {
+			.container {
 				padding: 10px;
 				border: 1px solid gray;
 				margin: 10px;
@@ -47,7 +47,7 @@
 		</style>
 	</head>
 	<body>
-		<code id="log">
+		<code class="log">
 			<h3>Mutation events</h3>
 		</code>
 	<div class="wrapper">
@@ -62,20 +62,6 @@
 			<li><a href="https://github.com/Matt-Esch/virtual-dom/wiki">Other links</a></li>
 		</ul>
 
-		<div id="volatile">
-			<section>
-				<h2>Section 1</h2>
-				<p>Manual DOM manipulation is messy and keeping track of the previous DOM state is hard. A solution to this problem is to write your code as if you were recreating the entire DOM whenever state changes. Of course, if you actually recreated the entire DOM every time your application state changed, your app would be very slow and your input fields would lose focus.</p>
-			</section>
-			<section>
-				<h2>Section 2</h2>
-				<p>Manual DOM manipulation is messy and keeping track of the previous DOM state is hard. A solution to this problem is to write your code as if you were recreating the entire DOM whenever state changes. Of course, if you actually recreated the entire DOM every time your application state changed, your app would be very slow and your input fields would lose focus.</p>
-			</section>
-			<section>
-				<h2>Section 3</h2>
-				<p>Manual DOM manipulation is messy and keeping track of the previous DOM state is hard. A solution to this problem is to write your code as if you were recreating the entire DOM whenever state changes. Of course, if you actually recreated the entire DOM every time your application state changed, your app would be very slow and your input fields would lose focus.</p>
-			</section>
-		</div>
 	</div>
 	</body>
 </html>
