@@ -32,9 +32,10 @@ var containerModule = fruitmachine.define({
 	template: require('./views/container.html')
 });
 
-function createNewVNode(inject) {
+function createVNode(inject) {
 
 	var random = Math.random() > 0.75;
+	var vNode;
 
 	if (!container) {
 		container = new containerModule()
@@ -54,14 +55,17 @@ function createNewVNode(inject) {
 		module.model.set('section', random ? 'RANDOM!' : module.slot);
 	});
 
-	container.render();
-
 	if (inject) {
-		container.appendTo(wrapperEl);
+		container.render()
+			.appendTo(wrapperEl);
+
+		vNode = virtualize(container.el);
+		console.log('Created and injected vNode', vNode);
+	} else {
+		vNode = virtualize.fromHTML(container.toHTML());
+		console.log('Created vNode', vNode);
 	}
 
-	var vNode = virtualize(container.el);
-	console.log('Initial DOM node', vNode);
 	return vNode;
 }
 
@@ -101,14 +105,14 @@ function updateDom(existingVNode, newVNode) {
 document.addEventListener('DOMContentLoaded', function() {
 
 	setup();
-	existingVNode = createNewVNode(true);
+	existingVNode = createVNode(true);
 	logMutations(wrapperEl);
 
 	document.querySelector('button').addEventListener('click', function() {
 
 		log('<br /><br /><strong>[[Button click]]</strong>');
 
-		var newVNode = createNewVNode();
+		var newVNode = createVNode();
 		updateDom(existingVNode, newVNode);
 
 		// Set the pointer to what's now in the DOM
